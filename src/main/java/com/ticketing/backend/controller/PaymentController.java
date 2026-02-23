@@ -1,42 +1,33 @@
 package com.ticketing.backend.controller;
 
 import com.ticketing.backend.entity.Payment;
-import com.ticketing.backend.entity.Registration;
 import com.ticketing.backend.repository.PaymentRepository;
-import com.ticketing.backend.repository.RegistrationRepository;
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/payments")
-@RequiredArgsConstructor
+@RequestMapping("/api/payment")
+@CrossOrigin(origins = "*")
 public class PaymentController {
 
-    private final PaymentRepository paymentRepository;
-    private final RegistrationRepository registrationRepository;
+    @Autowired
+    private PaymentRepository paymentRepository;
 
-    @PostMapping("/pay")
-    public Payment pay(@RequestParam Long registrationId,
-                       @RequestParam String method,
-                       @RequestParam Double amount) {
+    @PostMapping
+    public Payment createPayment(@RequestBody Payment payment) {
 
-        Registration reg = registrationRepository.findById(registrationId)
-                .orElseThrow(() -> new RuntimeException("Registration not found"));
-
-        reg.setStatus("CONFIRMED");
-        registrationRepository.save(reg);
-
-        Payment payment = new Payment();
-        payment.setRegistrationId(registrationId);
-        payment.setAmount(amount);
-        payment.setMethod(method);
-        payment.setStatus("SUCCESS");
-        payment.setTransactionId(UUID.randomUUID().toString());
         payment.setPaidAt(LocalDateTime.now());
 
         return paymentRepository.save(payment);
+    }
+
+    @GetMapping
+    public List<Payment> getAllPayments() {
+
+        return paymentRepository.findAll();
     }
 }

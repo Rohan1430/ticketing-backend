@@ -1,29 +1,57 @@
 package com.ticketing.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payments")
-@Getter @Setter
+@Table(name="payments")
 public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="registration_id")
     private Long registrationId;
-
-    private Double amount;
+    private double amount;
     private String method;
     private String status;
-
-    @Column(name="transaction_id")
     private String transactionId;
 
-    @Column(name="paid_at")
     private LocalDateTime paidAt;
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(Long registrationId) {
+        this.registrationId = registrationId;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public LocalDateTime getPaidAt() {
+        return paidAt;
+    }
+
+    public void setPaidAt(LocalDateTime paidAt) {
+        this.paidAt = paidAt;
+    }
 }
